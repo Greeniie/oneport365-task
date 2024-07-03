@@ -24,16 +24,11 @@
     "react-tooltip": "^5.27.1",
     "web-vitals": "^2.1.4"
   },
-  "homepage": "https://greeniie.github.io/oneport365-task",
-
-
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
