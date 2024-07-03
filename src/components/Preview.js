@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import logo from "../images/download.png";
 import QuoteTable1 from "./QuoteTable1";
 import QuoteTable2 from "./QuoteTable2";
 import moment from "moment";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { notification } from "antd";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 
-import { createQuote, getAllQuotes } from "../redux/QuoteSlice";
+import { createQuote } from "../redux/QuoteSlice";
 
 const Preview = ({ modalData, handleClose }) => {
   const [confirmLoading, setConfirmLoading] = useState(false);
