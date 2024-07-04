@@ -64,17 +64,7 @@ const QuoteDetails = ({ id, handleClose }) => {
               </div>
             </button>
           </div>
-          <div>
-            {" "}
-            <button
-              className="download-button"
-              onClick={() => navigate("/edit", { state: singleData })}
-            >
-              <div>
-                <i className="fa fa-pencil" aria-hidden="true"></i>
-              </div>
-            </button>
-          </div>
+  
           <div>
             {" "}
             <button className="close-button" onClick={handleClose}>
