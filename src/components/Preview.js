@@ -67,7 +67,7 @@ const Preview = ({ modalData, handleClose }) => {
             <div> {modalData?.quote_title} </div>
             <div className="detail text-[12px] md:text-[20px] w-[80%] md:w-full">
               {" "}
-              {moment(modalData.quote_date).format("MMMM Do YYYY, h:mm:ss a")}
+              {moment(modalData?.quote_date).format("MMMM Do YYYY, h:mm:ss a")}
             </div>
           </Modal.Title>
         </div>

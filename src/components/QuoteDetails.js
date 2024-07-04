@@ -6,14 +6,27 @@ import { getOneQuote } from "../redux/QuoteSlice";
 import QuoteTable1 from "./QuoteTable1";
 import QuoteTable2 from "./QuoteTable2";
 import moment from "moment";
+import { useNavigate } from "react-router-dom";
 
 const QuoteDetails = ({ id, handleClose }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { singleData } = useSelector((state) => state.quotes);
 
   useEffect(() => {
     dispatch(getOneQuote(id));
   }, [id]);
+
+  const handleDownload = () => {
+    const dataStr = JSON.stringify(singleData, null, 2);
+    const blob = new Blob([dataStr], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "quote_data.json";
+    a.click();
+    URL.revokeObjectURL(url);
+  };
 
   return (
     <div>
@@ -42,12 +55,23 @@ const QuoteDetails = ({ id, handleClose }) => {
               Save Quote
             </button>
           </div>
-          <div class="styled-line"></div>
+          <div className="styled-line"></div>
           <div>
             {" "}
-            <button className="download-button">
+            <button className="download-button" onClick={handleDownload}>
               <div>
-                <i class="fa fa-download" aria-hidden="true"></i>
+                <i className="fa fa-download" aria-hidden="true"></i>
+              </div>
+            </button>
+          </div>
+          <div>
+            {" "}
+            <button
+              className="download-button"
+              onClick={() => navigate("/edit", { state: singleData })}
+            >
+              <div>
+                <i className="fa fa-pencil" aria-hidden="true"></i>
               </div>
             </button>
           </div>
@@ -55,7 +79,7 @@ const QuoteDetails = ({ id, handleClose }) => {
             {" "}
             <button className="close-button" onClick={handleClose}>
               <div>
-                <i class="fa fa-close" aria-hidden="true"></i>
+                <i className="fa fa-close" aria-hidden="true"></i>
               </div>
             </button>
           </div>
@@ -162,7 +186,7 @@ const QuoteDetails = ({ id, handleClose }) => {
 
           <div className="note my-[40px] flex gap-[5px]">
             <div>
-              <i class="fa fa-info-circle" aria-hidden="true"></i>
+              <i className="fa fa-info-circle" aria-hidden="true"></i>
             </div>
 
             <div>

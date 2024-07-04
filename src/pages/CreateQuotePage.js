@@ -105,7 +105,7 @@ const CreateQuotePage = () => {
       quote_title: formData.quote_title,
       quote_date: currentDate,
       sections: sections.map((section, index) => ({
-        section_name: `Section ${index + 1}`,
+        section_name: section.section_name,
         section_number: index + 1,
         section_currency: {
           currency: section.currencyData.currency,
