@@ -28,7 +28,6 @@ const EditQuotePage = () => {
   ]);
 
   const [show, setShow] = useState(false);
-  const [editFormData, setEditFormData] = useState(null);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -72,41 +71,19 @@ const EditQuotePage = () => {
 
   const currentDate = moment().startOf("day").toISOString();
 
-
-  console.log(singleData)
-  useEffect(() => {
-    setEditFormData({
-      quote_title: singleData?.quote_title,
-      quote_date: singleData?.quote_date,
-      sections: singleData?.sections.map((section, index) => ({
-        section_name: section?.section_name, 
-        section_number: index + 1,
-        section_currency: {
-          currency: section.currencyData.currency,
-          exchange_rate: section.currencyData.exchange_rate,
-          is_base_currency: section.currencyData.is_base_currency,
-          customer_currency: section.currencyData.customer_currency,
-        },
-        section_data: section.quoteData.section_data,
-      })),
-    });
-  }, []);
-
-  console.log(editFormData)
-
   const data = {
-    quote_title: editFormData.quote_title,
-    quote_date: editFormData.quote_date,
-    sections: editFormData.sections.map((section, index) => ({
-      section_name: `Section ${index + 1}`, // Assuming section names follow this pattern
+    quote_title: singleData.quote_title,
+    quote_date: singleData.quote_date,
+    sections: singleData.sections.map((section, index) => ({
+      section_name: section.section_name,
       section_number: index + 1,
       section_currency: {
-        currency: section.currencyData.currency,
-        exchange_rate: section.currencyData.exchange_rate,
-        is_base_currency: section.currencyData.is_base_currency,
-        customer_currency: section.currencyData.customer_currency,
+        currency: section.section_currency.currency,
+        exchange_rate: section.section_currency.exchange_rate,
+        is_base_currency: section.section_currency.is_base_currency,
+        customer_currency: section.section_currency.customer_currency,
       },
-      section_data: section.quoteData.section_data,
+      section_data: section.section_data,
     })),
   };
 
@@ -123,17 +100,17 @@ const EditQuotePage = () => {
   const handleSaveDraft = () => {
     const draftData = {
       quote_title: singleData.quote_title,
-      quote_date: currentDate,
-      sections: sections.map((section, index) => ({
-        section_name: `Section ${index + 1}`,
+      quote_date: singleData.quote_date,
+      sections: singleData.sections.map((section, index) => ({
+        section_name: section.section_name,
         section_number: index + 1,
         section_currency: {
-          currency: section.currencyData.currency,
-          exchange_rate: section.currencyData.exchange_rate,
-          is_base_currency: section.currencyData.is_base_currency,
-          customer_currency: section.currencyData.customer_currency,
+          currency: section.section_currency.currency,
+          exchange_rate: section.section_currency.exchange_rate,
+          is_base_currency: section.section_currency.is_base_currency,
+          customer_currency: section.section_currency.customer_currency,
         },
-        section_data: section.quoteData.section_data,
+        section_data: section.section_data,
       })),
     };
 
@@ -160,8 +137,10 @@ const EditQuotePage = () => {
             to quotes
           </div>
           <div className="qt">
-            {editFormData?.quote_title}
-            <span className="text-[#9CA3AF] pl-[15px]">[{editFormData?.quote_date}]</span>
+            {singleData?.quote_title}
+            <span className="text-[#9CA3AF] pl-[15px]">
+              [{singleData?.quote_date}]
+            </span>
           </div>
         </div>
         <div className="flex-row md:flex-col items-center md:gap-[10px]">
@@ -201,7 +180,7 @@ const EditQuotePage = () => {
             <div className="change">Change Quote Time</div>
             <div className="qdate text-[#776D7D]">
               <span className="text-[#007003]">{momentFormattedDate}</span>{" "}
-              {editFormData?.start_time} - {editFormData?.end_time}{" "}
+              {singleData?.start_time} - {singleData?.end_time}{" "}
               <i
                 className="fa fa-chevron-down"
                 aria-hidden="true"
@@ -210,22 +189,23 @@ const EditQuotePage = () => {
             </div>
           </div>
           <Form>
-            {editFormData?.sections.map((section, index) => (
+            {singleData?.sections.map((section, index) => (
               <div key={index} className="mb-4 relative">
                 <QuoteTableForm
                   onQuoteDataChange={(data) =>
                     handleQuoteDataChange(index, data)
                   }
                 />
-                {editFormData?.sections.length > 1 && index === editFormData?.sections.length - 1 && (
-                  <button
-                    type="button"
-                    onClick={() => removeSection(index)}
-                    className="absolute top-0 right-0 bg-none text-[#C70024] p-2"
-                  >
-                    Remove Section
-                  </button>
-                )}
+                {singleData?.sections.length > 1 &&
+                  index === singleData?.sections.length - 1 && (
+                    <button
+                      type="button"
+                      onClick={() => removeSection(index)}
+                      className="absolute top-0 right-0 bg-none text-[#C70024] p-2"
+                    >
+                      Remove Section
+                    </button>
+                  )}
               </div>
             ))}
             <Button
@@ -286,7 +266,7 @@ const EditQuotePage = () => {
 
         <div className="col-span-3">
           <div className="mt-[10px] md:mt-[0]">
-            {editFormData?.sections.map((section, index) => (
+            {singleData?.sections.map((section, index) => (
               <div className="curr" key={index}>
                 <div className="ss flex justify-between items-center">
                   <div className="sec">Section Currency</div>
@@ -348,12 +328,12 @@ const EditQuotePage = () => {
         <EditCurrency
           handleClose={handleClose}
           handleCurrencyData={(data) =>
-            handleCurrencyDataChange(editFormData?.sections.length - 1, data)
+            handleCurrencyDataChange(singleData?.sections.length - 1, data)
           }
         />
       </Modal>
       <Modal show={showPreviewModal} onHide={handlePClose} size="xl">
-        <Preview handleClose={handlePClose} modalData={editFormData} />
+        <Preview handleClose={handlePClose} modalData={data} />
       </Modal>
       <ToastContainer />
     </div>
